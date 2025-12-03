@@ -13,21 +13,17 @@ app.use(express.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve React
+// Serve React build
 app.use(express.static(path.join(__dirname, "..", "dist")));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
-});
-
-// API
+// API routes
 import apiRouter from "./api/index.js";
 app.use("/api", apiRouter);
 
-// SPA fallback — FIX FOR RENDER/EXPRESS 5
-app.get(/.*/, (req, res) => {
+// SPA fallback — exclude /api
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`🚀 Server on ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 server running on ${PORT}`));
