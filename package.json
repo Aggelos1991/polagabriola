@@ -1,0 +1,29 @@
+{
+  "name": "polagabriola-digital-gallery",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "server": "node server/index.js",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@google/genai": "^1.30.0",
+    "@react-three/drei": "9.102.6",
+    "@react-three/fiber": "8.15.16",
+    "lucide-react": "0.344.0",
+    "maath": "0.10.7",
+    "openai": "^6.9.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "0.161.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}
