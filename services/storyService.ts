@@ -6,10 +6,7 @@ export const generatePhotoStory = async (topic: string): Promise<string> => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          {
-            role: "system",
-            content: "write a dreamy nostalgic caption max 50 words, lowercase."
-          },
+          { role: "system", content: "write a dreamy nostalgic caption max 50 words, lowercase." },
           { role: "user", content: topic }
         ]
       })
@@ -17,12 +14,16 @@ export const generatePhotoStory = async (topic: string): Promise<string> => {
 
     const data = await response.json();
 
-    // ✅ CORRECT FIELD FOR OPENAI RESPONSE
-    const caption = data?.choices?.[0]?.message?.content;
+    // 🔥 LAST TIME THIS WAS THE FIX 🔥
+    const text =
+      data?.choices?.[0]?.message?.content?.trim() ||
+      data?.story ||
+      data?.response ||
+      null;
 
-    if (caption) return caption;
+    if (text) return text;
 
-    return "a faint memory...";
+    return "the memory is too hazy right now.";
   } catch (err) {
     console.error("STORY GENERATION ERROR:", err);
     return "the memory is too hazy right now.";
