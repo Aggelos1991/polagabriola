@@ -1,14 +1,28 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import openaiRoute from "./api/openai.js";
 
 dotenv.config();
 
 const app = express();
-app.use(express.json());
 
-app.use("/api/openai", openaiRoute);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.listen(3001, () => {
-  console.log("AI server running on http://localhost:3001");
+// ---- SERVE REACT BUILD ----
+app.use(express.static(path.join(__dirname, "..", "dist")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+});
+
+// ---- API ----
+app.use("/api/openai", express.json(), async (req, res) => {
+  res.json({ message: "AI connected OK" });
+});
+
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
