@@ -1,13 +1,10 @@
-import { Router } from "express";
-import openaiHandler from "./openai.js";
-import storyHandler from "./story.js";
+import express from "express";
+import openaiRoute from "./openai.js";
+import storyRoute from "./story.js";
 
-const router = Router();
+const router = express.Router();
 
-// route for /api/openai
-router.post("/openai", openaiHandler);
-
-// route for /api/story
-router.post("/story", storyHandler);
+router.use("/openai", openaiRoute);
+router.use("/story", storyRoute);
 
 export default router;
