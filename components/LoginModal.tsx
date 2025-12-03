@@ -68,7 +68,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
           
           {error && (
             <p className="text-red-400 text-xs text-center animate-in slide-in-from-top-1">
-              Incorrect passcode. Try 'gabriola'.
+              Incorrect passcode. Try again!.
             </p>
           )}
 
