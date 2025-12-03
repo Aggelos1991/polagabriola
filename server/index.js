@@ -13,17 +13,19 @@ app.use(express.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve React build
-app.use(express.static(path.join(__dirname, "..", "dist")));
-
-// API routes
+// 👉 API MUST COME FIRST
 import apiRouter from "./api/index.js";
 app.use("/api", apiRouter);
 
-// SPA fallback — exclude /api
-app.get(/^\/(?!api).*/, (req, res) => {
+// 👉 Serve static
+app.use(express.static(path.join(__dirname, "..", "dist")));
+
+// 👉 SPA fallback ONLY AFTER API routes
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
 });
 
+// Render port
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`🚀 server running on ${PORT}`));
+
+app.listen(PORT, () => console.log("🚀 Server running on port " + PORT));
