@@ -1,37 +1,29 @@
 import express from "express";
-import dotenv from "dotenv";
-
-dotenv.config();
+import OpenAI from "openai";
 
 const router = express.Router();
 
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 router.post("/", async (req, res) => {
   try {
-    const { model, messages } = req.body;
+    const { prompt } = req.body;
 
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      return res.status(500).json({ error: "Missing OPENAI_API_KEY" });
-    }
-
-    const completion = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model,
-        messages,
-        max_tokens: 80
-      })
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "Return ONLY the caption text." },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: 80
     });
 
-    const data = await completion.json();
-    res.status(200).json(data);
+    res.json({ text: completion.choices[0].message.content });
   } catch (err) {
-    console.error("BACKEND ERROR:", err);
-    res.status(500).json({ error: "Oracle failed", details: err.message });
+    console.error("OPENAI ERROR:", err);
+    res.status(500).json({ error: err.message });
   }
 });
 
